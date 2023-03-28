@@ -15,13 +15,15 @@ public class UserConfig {
         return args -> {
             long i = 1;
             repository.deleteById(i);
-            User jean = new User("Jean", "Jean@gmail.com", "J34n",2);
+            User jean = new User("Jean", "Jean@gmail.com", "J34n",UserRole.USER);
 
-            User marie = new User("Marie", "Marie@gmail.com", "M4r13", 1);
+            User marie = new User("Marie", "Marie@gmail.com", "M4r13", UserRole.USER);
+
+            User sa = new User("sa", "sa@gmail.com", "password", UserRole.USER);
 
 
             repository.saveAll(
-                    List.of(jean, marie)
+                    List.of(jean, marie, sa)
             );
 
         };

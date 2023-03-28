@@ -1,16 +1,18 @@
 package com.example.demo.user;
 
 import com.example.demo.Hash256;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.SequenceGenerator;
-import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.*;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.Collections;
 
 @Entity
 @Table(name="userbattlejudge")
-public class User {
+public class User implements UserDetails{
     @Id
     @SequenceGenerator(
             name = "user_sequence",
@@ -25,7 +27,40 @@ public class User {
     private String name;
     private String mail;
     private String password;
-    private int role;
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities(){
+        SimpleGrantedAuthority authority =
+                new SimpleGrantedAuthority("USER");
+        return Collections.singletonList(authority);
+    }
+
+    @Override
+    public String getUsername(){
+        return mail;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return false;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 
     public User() {
     }
@@ -34,7 +69,7 @@ public class User {
         this.name = name;
         this.mail = mail;
         this.password = Hash256.hash(password);
-        this.role = 0;
+        this.role = UserRole.USER;
     }
 
     public User(Long id, String name, String mail, String password) {
@@ -42,10 +77,10 @@ public class User {
         this.name = name;
         this.mail = mail;
         this.password = Hash256.hash(password);
-        this.role = 0;
+        this.role = UserRole.USER;
     }
 
-    public User(String name, String mail, String password, int role) {
+    public User(String name, String mail, String password, UserRole role) {
         this.id = id;
         this.name = name;
         this.mail = mail;
@@ -93,6 +128,10 @@ public class User {
 
     public void setPassword(String password) {
         this.password = Hash256.hash(password);
+    }
+
+    public UserRole getRole() {
+        return role;
     }
 }
 

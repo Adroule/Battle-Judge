@@ -1,8 +1,13 @@
 <html lang="fr" xmlns:th="https://www.thymeleaf.org">
+
+    <div th:if="${param.error}">
+        Invalid username and password.
+    </div>
     <form method="POST" :action="@{/user/UserController}" th:object="${user}">
+
         <div class="form-example">
             <label for="mail">Enter your email: </label>
-            <input type="email" name="mail" id="mail" required th:field="*{mail}">
+            <input type="text" name="mail" id="mail" required th:field="*{mail}">
         </div>
         <div class="form-example">
             <label for="password">Enter your password: </label>

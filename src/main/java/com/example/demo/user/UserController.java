@@ -30,7 +30,12 @@ public class UserController {
         return "signIn";
     }
 
-
+    @GetMapping("/hello")
+    public String hello(Model model){
+        User user = new User();
+        model.addAttribute("user",user);
+        return "hello";
+    }
 
     @PostMapping("/register")
     public String registerNewUser(@ModelAttribute("user") User user){
@@ -56,7 +61,4 @@ public class UserController {
         }
     }
 
-    public String wrongPassword(){
-        return "Wrong Email or Password";
-    }
 }
